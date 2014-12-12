@@ -1,0 +1,34 @@
+<:Title>
+  {{ template main_path, "title", {controller_group: 'main'} }}
+
+<:Body>
+  <div class="container">
+    <header>
+      <div class="header">
+        <ul class="nav nav-pills pull-right">
+          <:nav href="/" text="Home" />
+          <:nav href="/todos" text="Todos" />
+          <:nav href="/about" text="About" />
+          <:user-templates:menu />
+        </ul>
+        <h3 class="text-muted">Volt sample todo</h3>
+      </div>
+    </header>
+
+    <:volt:notices />
+
+    {{ template main_path, 'body', {controller_group: 'main'} }}
+
+    <footer>
+      <div class="footer">
+        <p>&copy; mm_schwarz 2014</p>
+      </div>
+    </footer>
+
+  </div>
+
+<:Nav>
+  <li class="{{ if url.path.split('/')[1] == attrs.href.split('/')[1] }}active{{ end }}">
+    <a href="{{ attrs.href }}">{{ attrs.text }}</a>
+  </li>
+
