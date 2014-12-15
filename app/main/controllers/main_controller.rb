@@ -11,21 +11,14 @@ class MainController < Volt::ModelController
 
   def todos
     if Volt.user then
-      unless _todos.empty? then
-        _todos.find(user_id: Volt.user._id).then do |mytodos|
-          self._todos = mytodos
-        end
-      else
-        p 'No todo item.'
+      _todos.find(user_id: Volt.user._id).then do |mytodos|
+        self._todos = mytodos
       end
-    else
-      # _todos = ''
-      flash._errors << 'Do not login.'
     end
   end
 
   def owner(todo)
-    user = store._users.find_one(_id: todo._user_id).name
+    store._users.find_one(_id: todo._user_id)._name
   end
 
   def add_todo

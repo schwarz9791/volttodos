@@ -3,7 +3,7 @@
 
 <:Body>
   <div class="row">
-    {{ if Volt.user }}
+    {{ if !_todos.empty? && Volt.user }}
       <div class="col-md-6">
         <h1>Todo List ({{ _todos.size }})</h1>
 
