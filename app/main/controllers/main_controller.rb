@@ -21,33 +21,37 @@ class MainController < Volt::ModelController
     store._users.find_one(_id: todo._user_id)._name
   end
 
+  def created_at(todo)
+    todo._created_at
+  end
+
   def add_todo
-    _todos << { name: _new_todo, user_id: Volt.user._id }
+    self._todos << { name: _new_todo, user_id: Volt.user._id, created_at: Time.now, updated_at: Time.now }
     store._new_todo = ''
   end
 
   def remove_todo(todo)
-    _todos.delete(todo)
+    self._todos.delete(todo)
   end
 
   def current_todo
-    _todos[params._index.or(0).to_i]
+    self._todos[params._index.or(0).to_i]
   end
 
   def check_all
-    _todos.each { |todo| todo._completed = true }
+    self._todos.each { |todo| todo._completed = true }
   end
 
   def completed
-    _todos.count { |todo| todo._completed }
+    self._todos.count { |todo| todo._completed }
   end
 
   def incomplete
-    _todos.size - completed
+    self._todos.size - completed
   end
 
   def percent_complete
-    return (( completed / _todos.size.to_f ) * 100.0).round
+    return (( completed.or(0) / self._todos.size.to_f ) * 100.0).round
   end
 
   private

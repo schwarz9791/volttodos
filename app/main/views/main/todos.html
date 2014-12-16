@@ -3,8 +3,8 @@
 
 <:Body>
   <div class="row">
-    {{ if !_todos.empty? && Volt.user }}
-      <div class="col-md-6">
+    <div class="col-md-6">
+      {{ if !_todos.empty? && Volt.user }}
         <h1>Todo List ({{ _todos.size }})</h1>
 
         <div class="row">
@@ -24,35 +24,35 @@
           {{ _todos.each do |todo| }}
               <tr e-click="params._index = index" class="{{ if params._index.or(0).to_i == index }}selected{{ end }}">
                 <td><input type="checkbox" checked="{{ todo._completed }}"></td>
-                <td class="{{ if todo._completed }}complete{{ end }}">{{ todo._name }} by {{ owner(todo) }}</td>
+                <td class="{{ if todo._completed }}complete{{ end }}">{{ todo._name }}</td>
                 <td><a e-click="remove_todo(todo)"><span class="glyphicon glyphicon-remove-circle"></span></a></td>
               </tr>
           {{ end }}
         </table>
 
         <hr>
-
+      {{ end }}
+      {{ if Volt.user }}
         <form e-submit="add_todo" role="form">
           <div class="form-group">
             <label>Add Todo</label>
             <input class="form-control" type="text" value="{{ _new_todo }}">
           </div>
         </form>
-      </div>
-
-      <div class="col-md-6">
-        {{ if current_todo }}
-          <h2>{{ current_todo._name }}</h2>
-          <form role="form">
-            <div class="form-group">
-              <textarea class="form-control">{{ current_todo._description }}</textarea>
-            </div>
-          </form>
-        {{ end }}
-      </div>
-    {{ else }}
-      <div class="col-md-12">
+      {{ else }}
         <h3>Please Login.</h3>
-      </div>
-    {{ end }}
+      {{ end }}
+    </div>
+
+    <div class="col-md-6">
+      {{ if !_todos.empty? && Volt.user }}
+        <h2>{{ current_todo._name }}</h2>
+        <div class="text-muted">Created at {{ created_at(current_todo) }} by {{ owner(current_todo) }}</div>
+        <form role="form">
+          <div class="form-group">
+            <textarea class="form-control">{{ current_todo._description }}</textarea>
+          </div>
+        </form>
+      {{ end }}
+    </div>
   </div>
