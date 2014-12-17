@@ -4,7 +4,7 @@
 <:Body>
   <div class="row">
     <div class="col-md-6">
-      {{ if !_todos.empty? && Volt.user }}
+      {{ if !_todos.empty? }}
         <h1>Todo List ({{ _todos.size }})</h1>
 
         <div class="row">
@@ -31,8 +31,7 @@
         </table>
 
         <hr>
-      {{ end }}
-      {{ if Volt.user }}
+
         <form e-submit="add_todo" role="form">
           <div class="form-group">
             <label>Add Todo</label>
@@ -40,12 +39,12 @@
           </div>
         </form>
       {{ else }}
-        <h3>Please Login.</h3>
+        <h3>Please login.</h3>
       {{ end }}
     </div>
 
     <div class="col-md-6">
-      {{ if !_todos.empty? && Volt.user }}
+      {{ if current_todo }}
         <h2>{{ current_todo._name }}</h2>
         <div class="text-muted">Created at {{ created_at(current_todo) }} by {{ owner(current_todo) }}</div>
         <form role="form">

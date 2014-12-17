@@ -1,5 +1,5 @@
 class MainController < Volt::ModelController
-  self.model :store
+  model :page
 
   def index
     # Add code for when the index view is loaded
@@ -10,15 +10,16 @@ class MainController < Volt::ModelController
   end
 
   def todos
-    if Volt.user then
-      _todos.find(user_id: Volt.user._id).then do |mytodos|
-        self._todos = mytodos
-      end
+    self.model = :store
+
+    u = Volt.user._id if Volt.user?
+    _todos.find(owner: u).then do |mytodos|
+      self._todos = mytodos
     end
   end
 
   def owner(todo)
-    store._users.find_one(_id: todo._user_id)._name
+    store._users.find_one(_id: todo._owner)._name
   end
 
   def created_at(todo)
@@ -26,33 +27,38 @@ class MainController < Volt::ModelController
   end
 
   def add_todo
-    self._todos << { name: _new_todo, user_id: Volt.user._id, created_at: Time.now, updated_at: Time.now }
-    store._new_todo = ''
+    if Volt.user then
+      _todos << { name: _new_todo, owner: Volt.user._id, created_at: Time.now, updated_at: Time.now }
+    end
+   store._new_todo = '' 
   end
 
   def remove_todo(todo)
-    self._todos.delete(todo)
+    _todos.delete(todo)
   end
 
   def current_todo
-    self._todos[params._index.or(0).to_i]
+    if _todos then
+      _todos[params._index.or(0).to_i]
+    end
   end
 
   def check_all
-    self._todos.each { |todo| todo._completed = true }
+    _todos.each { |todo| todo._completed = true }
   end
 
   def completed
-    self._todos.count { |todo| todo._completed }
+    _todos.count { |todo| todo._completed }
   end
 
   def incomplete
-    self._todos.size - completed
+    _todos.size - completed
   end
 
   def percent_complete
-    return (( completed.or(0) / self._todos.size.to_f ) * 100.0).round
+    return (( completed.or(0) / _todos.size.to_f ) * 100.0).round
   end
+  # end
 
   private
 
