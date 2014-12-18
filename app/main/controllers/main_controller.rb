@@ -12,13 +12,13 @@ class MainController < Volt::ModelController
   def todos
     self.model = :store
 
-    _todos.find(owner: (Volt.user._id if Volt.user?) ).then do |mytodos|
+    _todos.find(user_id: (Volt.user._id if Volt.user?) ).then do |mytodos|
       self._todos = mytodos
     end
   end
 
   def owner(todo)
-    store._users.find_one(_id: todo._owner)._name
+    store._users.find_one(_id: todo._user_id)._name
   end
 
   def created_at(todo)
@@ -27,7 +27,7 @@ class MainController < Volt::ModelController
 
   def add_todo
     if Volt.user then
-      _todos << { name: _new_todo, owner: Volt.user._id, created_at: Time.now, updated_at: Time.now }
+      _todos << { name: _new_todo, user_id: Volt.user._id, created_at: Time.now.to_s, updated_at: Time.now.to_s }
     end
    store._new_todo = '' 
   end

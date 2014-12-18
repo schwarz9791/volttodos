@@ -25,22 +25,26 @@
               <tr e-click="params._index = index" class="{{ if params._index.or(0).to_i == index }}selected{{ end }}">
                 <td><input type="checkbox" checked="{{ todo._completed }}"></td>
                 <td class="{{ if todo._completed }}complete{{ end }}">{{ todo._name }}</td>
-                <td><a e-click="remove_todo(todo)"><span class="glyphicon glyphicon-remove-circle"></span></a></td>
+                <td class="text-right"><a e-click="remove_todo(todo)"><span class="glyphicon glyphicon-remove-circle"></span></a></td>
               </tr>
           {{ end }}
         </table>
 
         <hr>
+        {{ else }}
+          <h3>No todo item.</h3>
+        {{ end }}
 
+        {{ if Volt.user }}
         <form e-submit="add_todo" role="form">
           <div class="form-group">
             <label>Add Todo</label>
             <input class="form-control" type="text" value="{{ _new_todo }}">
           </div>
         </form>
-      {{ else }}
-        <h3>Please login.</h3>
-      {{ end }}
+        {{ else }}
+          <h3>Please login.</h3>
+        {{ end }}
     </div>
 
     <div class="col-md-6">
