@@ -12,8 +12,7 @@ class MainController < Volt::ModelController
   def todos
     self.model = :store
 
-    u = Volt.user._id if Volt.user?
-    _todos.find(owner: u).then do |mytodos|
+    _todos.find(owner: (Volt.user._id if Volt.user?) ).then do |mytodos|
       self._todos = mytodos
     end
   end
@@ -38,9 +37,7 @@ class MainController < Volt::ModelController
   end
 
   def current_todo
-    if _todos then
-      _todos[params._index.or(0).to_i]
-    end
+    _todos[params._index.or(0).to_i] if _todos?
   end
 
   def check_all
